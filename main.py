@@ -1,6 +1,7 @@
 import urllib.request
 import events_filter
 import json
+import sys
 
 def call_github_api(username: str) -> tuple[dict, int]:
     """
@@ -37,4 +38,7 @@ def main(username: str):
 
 
 if __name__ == '__main__':
-    main('srid')
+    if len(sys.argv) > 0:
+        main(sys.argv[1])
+    else:
+        print("Provide a GitHub username")
