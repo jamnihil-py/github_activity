@@ -17,5 +17,24 @@ def call_github_api(username: str) -> tuple[dict, int]:
 
     return events_filter.filter_github_activity(github_data)
 
+def main(username: str):
+    """
+
+    :return:
+    """
+    user_events, total_events = call_github_api(username)
+
+    print(f"*****************************\n"
+          f"{username} Recent Activity:\n"
+          f"Total events: {total_events}\n"
+          f"*****************************")
+
+    for repo, v in user_events.items():
+        print(f"Repository [{repo}]:")
+        for event, x in v.items():
+            print(f"{event}: {x}")
+        print("*****************************")
+
+
 if __name__ == '__main__':
     main('srid')
