@@ -8,19 +8,18 @@ import exceptions
 
 def call_github_api(username: str) -> tuple[dict, int]:
     """
-    Calls the GitHub API with the username provided and sends the data to
-    function [function] to process and filter the type events
-    :param: Username
-    :return: A tuple containing two dictionaries ???
+    Calls the GitHub API with the username provided to obtain the latest user
+    activity and send it as a list to filter_github_activity to filter it
+    by repo and event type
+    :param: A valid GitHub username
+    :return: A tuple containing a dictionary and an integer
     """
     try:
         with urlopen(
                 f'https://api.github.com/users/{username}/events',
                 timeout=10
         ) as response:
-            github_data = json.load(response)
-
-        return events_filter.filter_github_activity(github_data)
+            return events_filter.filter_github_activity(json.load(response))
 
     except HTTPError as e:
         if e.code == 404:
@@ -33,17 +32,17 @@ def call_github_api(username: str) -> tuple[dict, int]:
     except URLError as e:
         raise ConnectionError("Connection error") from e
 
-
 def main(username: str):
     """
-
-    :return:
+    Calls the call_github_api with the username obtained from the CLI and print
+    the repo names with their respective events and a total of activities
+    :param: A valid GitHub username
     """
     try:
         user_events, total_events = call_github_api(username)
 
         print(f"*****************************\n"
-              f"{username} Recent Activity:\n"
+              f"{username} Recent Activity\n"
               f"Total events: {total_events}\n"
               f"*****************************")
 
